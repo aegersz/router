@@ -1,0 +1,1 @@
+autossh -M 0 -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" -R *:8080:192.168.0.1:80 www.site-name.org

@@ -1,0 +1,23 @@
+#
+# ssh back into router
+#ssh -R 2210:localhost:22 www.site-name.org 
+
+# ssh back into dev
+#ssh -R 2210:192.168.0.1:22 www.site-name.org
+
+#
+# https back into the router
+# > www.site-name.org:8080
+#ssh -vvv -R *:8080:localhost:443 www.site-name.org
+
+#
+# http back to the dev box BUT this requires port 8080 -> port 80 forwarding 
+# > www.site-name.org:8080
+# you will have to reconfig httpd !
+#ssh -vvv -R *:8080:192.168.0.1:8080 www.site-name.org
+#-----------------------------------------------------
+
+# tunnel back into webmin     
+# > www.site-name.org:10001
+#ssh -vvv -R *:10001:localhost:10000 www.site-name.org
+ssh -vvv -R *:10001:192.168.0.1:10001 www.site-name.org

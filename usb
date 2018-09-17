@@ -1,0 +1,32 @@
+# INPUT (for packets coming into the box itself)
+# OUTPUT (for altering locally-generated packets before routing)
+# FORWARD (for altering packets being routed through the box)
+# PREROUTING (for altering incoming packets before routing)
+# POSTROUTING (for altering packets as they are about to go out)
+
+dhclient -r usb0
+dhclient usb0
+
+iptables -F
+
+iptables -P INPUT ACCEPT
+iptables -F INPUT
+iptables -P OUTPUT ACCEPT
+iptables -F OUTPUT
+iptables -P FORWARD DROP
+iptables -F FORWARD
+
+iptables -t nat -F
+
+# Squid
+iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 3128
+iptables -t nat -A POSTROUTING -o usb0 -j MASQUERADE
+
+iptables -A FORWARD -o usb0 -j ACCEPT
+iptables -A FORWARD -o eth0 -j ACCEPT
+
+service iptables status
+
+route
+
+ping www.hotmail.com -c 3

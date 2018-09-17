@@ -1,0 +1,36 @@
+# INPUT (for packets coming into the box itself)
+# OUTPUT (for altering locally-generated packets before routing)
+# FORWARD (for altering packets being routed through the box)
+# PREROUTING (for altering incoming packets before routing)
+# POSTROUTING (for altering packets as they are about to go out)
+
+iptables -F
+
+iptables -P INPUT ACCEPT
+iptables -P OUTPUT ACCEPT
+iptables -P FORWARD DROP
+
+iptables -t nat -F
+iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 3128
+iptables -t nat -A POSTROUTING -j MASQUERADE
+
+iptables -A FORWARD -i eth0 -j ACCEPT
+iptables -A FORWARD -i wlan0 -j ACCEPT
+
+# see /etc/sysconfig/net*-scr*/ifcfg-wlan0
+iw dev
+
+ip link show wlan0
+ip link set wlan0 up
+
+# config /etc/wpa_supplicant.conf first
+wpa_supplicant -B wext -i wlan0 -c /etc/wpa_supplicant.conf
+
+dhclient -r wlan0
+dhclient wlan0
+
+iw wlan0 link
+
+route
+
+ping www.hotmail.com -c 3

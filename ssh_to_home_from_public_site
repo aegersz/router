@@ -1,0 +1,4 @@
+# run this after you setup the reverse tunnel from home
+#
+ssh -p 2210 localhost
+

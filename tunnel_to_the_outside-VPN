@@ -1,0 +1,6 @@
+#
+# This poor man's VPN directs all traffic to the forum and the IP address becomes that of my forum
+#
+# > configure Firefox SOCKS proxy
+
+ssh -D *:8090 www.site-name.org
